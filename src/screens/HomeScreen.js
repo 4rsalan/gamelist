@@ -1,6 +1,8 @@
 import React from 'react';
-import {View} from 'react-native';
-import {Header, SearchBar} from 'react-native-elements';
+import {View, FlatList} from 'react-native';
+import {SearchBar, ListItem} from 'react-native-elements';
+import Header from '../components/Header';
+import Card from '../components/Card';
 import rawg from "../api/rawg"
 
  class HomeScreen extends React.Component{
@@ -12,7 +14,8 @@ import rawg from "../api/rawg"
          }
      }
 
-     onSearch = async term => {
+     //Function which fires on search which handles input stage and retrieves list of games using RAWG api
+     onSearchHandler = async term => {
          this.setState({
              searchTerm: term,
          });
@@ -20,7 +23,7 @@ import rawg from "../api/rawg"
          const response = await rawg.get('games', {
              params: {
                  search: term,
-                 page_size: 10
+                 page_size: 15
              }
          });
          console.log(response.data.results);
@@ -30,28 +33,29 @@ import rawg from "../api/rawg"
          });
      };
 
-     searchGames = term =>{
-         this.setState({
-             searchTerm: term,
-         });
-
-         console.log(term)
-     };
-
     render(){
         //console.log("Rendered!");
          return(
            <View>
                <Header
-                   centerComponent={{text: "Home page", style: {color: "#fff"}}}
+                   headerText={'Home Page'}
                />
                <SearchBar
                    placeholder={"Search for a game..."}
-                   onChangeText={this.onSearch}
+                   onChangeText={this.onSearchHandler}
                    searchIcon={false}
                    clearIcon={false}
                    value={this.state.searchTerm}
                />
+                <FlatList
+                    data={this.state.searchResults}
+                    renderItem={({item}) =>(
+                        <ListItem
+                            title={item.name}
+                        />
+                    )}
+                    keyExtractor={item => item.id.toString()}
+                />
            </View>
          );
     }
