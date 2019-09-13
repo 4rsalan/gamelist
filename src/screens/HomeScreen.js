@@ -34,7 +34,7 @@ import rawg from "../api/rawg"
      };
 
     render(){
-        //console.log("Rendered!");
+        console.log("Rendered HomeScreen!");
          return(
            <View>
                <Header
