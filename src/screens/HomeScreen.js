@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList, TouchableOpacity, Modal} from 'react-native';
+import {View, FlatList, TouchableOpacity, Text} from 'react-native';
 import {SearchBar, ListItem} from 'react-native-elements';
 import Header from '../components/Header';
 import OptionalModal from '../components/OptionsModal';
@@ -69,7 +69,12 @@ import rawg from "../api/rawg"
                     )}
                     keyExtractor={item => item.id.toString()}
                 />
-               {modalVisible ? (<OptionalModal modalVisible={this.state.modalVisible} closeModalCallback={this.closeModal}/>) : null}
+               {modalVisible ?
+                   (<OptionalModal modalVisible={this.state.modalVisible} closeModalCallback={this.closeModal}>
+                       <Text>Is this working?</Text>
+                   </OptionalModal>)
+                   : null
+               }
 
 
            </View>

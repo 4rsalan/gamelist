@@ -34,7 +34,7 @@ class OptionalModal extends React.Component {
                         height: Dimensions.get('window').height * 0.6,
                         backgroundColor: '#fff', padding: 20,
                     }}>
-                        <Text>{this.props.name || "Name has not been set"}</Text>
+                        <View>{this.props.children}</View>
                         <Button
                             title={"Close Modal"}
                             onPress={this.closeModal}>
