@@ -1,17 +1,23 @@
 import HomeScreen from "./src/screens/HomeScreen";
 import ListScreen from "./src/screens/ListScreen";
 import React from 'react';
-import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 
-  const AppNavigator = createStackNavigator(
-      {
-      Home: HomeScreen,
-      List: ListScreen,
+const AppNavigator = createBottomTabNavigator(
+    {
+        Home: HomeScreen,
+        List: ListScreen,
     },
-      {
+    {
         initialRouteName: 'Home'
-      }
-      );
+    }
+);
 
-  export default createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends React.Component{
+    render(){
+        return(<AppContainer/>);
+    }
+}
