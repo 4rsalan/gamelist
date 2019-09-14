@@ -1,10 +1,13 @@
 import React from 'react';
-import {View, FlatList} from 'react-native';
+import {View, Text} from 'react-native';
+
 
 class ListScreen extends React.Component{
     constructor(props){
         super(props);
-
+        this.state = {
+            games: [],
+        }
     }
 
 
@@ -12,7 +15,7 @@ class ListScreen extends React.Component{
         console.log("Rendered ListScreen!");
         return(
             <View>
-
+            <Text>List View!</Text>
             </View>
         )
     }

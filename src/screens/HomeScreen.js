@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, TouchableOpacity, Modal} from 'react-native';
 import {SearchBar, ListItem} from 'react-native-elements';
 import Header from '../components/Header';
-import Card from '../components/Card';
+import OptionalModal from '../components/OptionsModal';
 import rawg from "../api/rawg"
 
  class HomeScreen extends React.Component{
@@ -10,7 +10,9 @@ import rawg from "../api/rawg"
          super(props);
          this.state = {
             searchTerm: '',
-            searchResults: []
+            searchResults: [],
+            game: null,
+            modalVisible: false
          }
      }
 
@@ -19,7 +21,6 @@ import rawg from "../api/rawg"
          this.setState({
              searchTerm: term,
          });
-
          const response = await rawg.get('games', {
              params: {
                  search: term,
@@ -27,14 +28,24 @@ import rawg from "../api/rawg"
              }
          });
          console.log(response.data.results);
-         console.log("yeeet");
          this.setState({
-             searchResults: response.data.results
+             searchResults: response.data.results,
          });
      };
 
+     openModal = ()=>{
+         this.setState({modalVisible:!this.state.modalVisible});
+     };
+
+     closeModal = ()=>{
+         this.setState({modalVisible:false});
+     };
+
     render(){
+        const {modalVisible, game} = this.state;
+
         console.log("Rendered HomeScreen!");
+        console.log(`Modal state is: ${modalVisible}`);
          return(
            <View>
                <Header
@@ -50,12 +61,17 @@ import rawg from "../api/rawg"
                 <FlatList
                     data={this.state.searchResults}
                     renderItem={({item}) =>(
-                        <ListItem
-                            title={item.name}
-                        />
+                        <TouchableOpacity onPress={this.openModal}>
+                            <ListItem
+                                title={item.name}
+                            />
+                        </TouchableOpacity>
                     )}
                     keyExtractor={item => item.id.toString()}
                 />
+               {modalVisible ? (<OptionalModal modalVisible={this.state.modalVisible} closeModalCallback={this.closeModal}/>) : null}
+
+
            </View>
          );
     }
