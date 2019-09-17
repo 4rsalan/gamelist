@@ -10,7 +10,7 @@ const AppNavigator = createBottomTabNavigator(
         List: ListScreen,
     },
     {
-        initialRouteName: 'Home'
+        initialRouteName: 'Home',
     }
 );
 

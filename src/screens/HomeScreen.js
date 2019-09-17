@@ -3,6 +3,7 @@ import {View, FlatList, TouchableOpacity, Text} from 'react-native';
 import {SearchBar, ListItem} from 'react-native-elements';
 import Header from '../components/Header';
 import OptionalModal from '../components/OptionsModal';
+import GameSelectScreen from '../components/GameSelectScreen';
 import rawg from "../api/rawg"
 
  class HomeScreen extends React.Component{
@@ -11,7 +12,7 @@ import rawg from "../api/rawg"
          this.state = {
             searchTerm: '',
             searchResults: [],
-            game: null,
+            activeGame: null,
             modalVisible: false
          }
      }
@@ -33,6 +34,13 @@ import rawg from "../api/rawg"
          });
      };
 
+     activeGameSetter = val =>{
+        const activeGame = this.state.searchResults.filter(game => game.id === val);
+        console.log(activeGame[0]);
+        this.setState({activeGame: activeGame[0]});
+        this.openModal();
+     };
+
      openModal = ()=>{
          this.setState({modalVisible:!this.state.modalVisible});
      };
@@ -42,7 +50,7 @@ import rawg from "../api/rawg"
      };
 
     render(){
-        const {modalVisible, game} = this.state;
+        const {modalVisible, activeGame} = this.state;
 
         console.log("Rendered HomeScreen!");
         console.log(`Modal state is: ${modalVisible}`);
@@ -61,22 +69,27 @@ import rawg from "../api/rawg"
                 <FlatList
                     data={this.state.searchResults}
                     renderItem={({item}) =>(
-                        <TouchableOpacity onPress={this.openModal}>
+                        <TouchableOpacity>
                             <ListItem
+                                leftAvatar={{
+                                    source: {uri: item.background_image}
+                                }}
                                 title={item.name}
+                                onPress={() => this.activeGameSetter(item.id)}
                             />
                         </TouchableOpacity>
                     )}
                     keyExtractor={item => item.id.toString()}
                 />
-               {modalVisible ?
-                   (<OptionalModal modalVisible={this.state.modalVisible} closeModalCallback={this.closeModal}>
-                       <Text>Is this working?</Text>
+               {(modalVisible && activeGame) ?
+                   (<OptionalModal modalVisible={this.state.modalVisible} closeModalCallback={this.closeModal} closeButtonName={"Go Back"}>
+                       <GameSelectScreen
+                           image={activeGame.background_image}
+                           title={activeGame.name}
+                       />
                    </OptionalModal>)
                    : null
                }
-
-
            </View>
          );
     }
